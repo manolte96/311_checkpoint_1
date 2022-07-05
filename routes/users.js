@@ -1,34 +1,18 @@
-const express = require('express')
-const app = express()
-const { users } = require('../data/index')
-console.log("please")
+const express = require("express")
+const router = express.Router()
+const bodyParser = require("body-parser")
+router.use(bodyParser.json())
+router.use(bodyParser.urlencoded({ extended: true }))
+const controller = require("../controllers/users")
 
-app.get("/users", (req , res) => {
-    console.log(users)  
-    res.json(users)
-    res.send('success')
-  
-  })
-  
-app.get("/users/:id", (req , res) => {
-  
-    console.log(req.params.id)
-    const userId = req.params.id  
-  
-    res.json(users[userId])
-    res.send(`We'll be sending you user ${req.params.id} shortly.`)
+router.get("/users", controller.listUsers)
 
-  })
-  
-app.delete("/users/:id", (req , res) => {
-  
-      console.log(req.params.id)
-      const userId = req.params.id  
-    
-      res.json(users[userId])
-      res.send(`We'll be deleting you user ${req.params.id}.`)
-    })
+router.get("/users/:id", controller.showUser)
 
-    //module.exports(app)
-    
-    //why can't these two get along
+router.post("/users", controller.createUser)
+
+router.put("/users/:id", controller.updateUser)
+
+router.delete("/users/:id", controller.deleteUser)
+
+module.exports = router
